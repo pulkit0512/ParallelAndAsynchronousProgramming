@@ -23,3 +23,17 @@ execute and when. Whereas in case Multi Core, Threads work simultaneously.**
 
 ![img.png](ConcurrencyVsParallelism.png)
 
+## Threads API
+- Threads API got introduced in Java1.
+- Threads are basically used to offload the blocking tasks as background tasks.
+- Threads allowed the developers to write asynchronous style of code.
+
+### Thread API Limitations
+- Requires a lot of code to introduce asynchronous calling
+- Runnable, Thread
+- Require additional properties in Runnable
+- Start and Join the thread
+- Low level
+- Easy to introduce complexity in to our code.
+- Threads are expensive 
+- Threads have their own runtime-stack, memory, registers and more
