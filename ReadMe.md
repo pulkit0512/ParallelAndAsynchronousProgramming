@@ -108,3 +108,18 @@ from the deck of thread1 from the other end so that currently executing task is 
 
 ### Limitations of Fork/Join Framework
 - Complex code and not developer friendly.
+
+## Streams API & Parallel Streams
+
+### Streams API
+- Streams API got introduced in Java 8
+- Streams API is used to process a collection of Objects
+- Streams in Java are created by using the stream() method
+
+### ParallelStreams
+- This allows your code to run in parallel
+- ParallelStreams are designed to solve **Data Parallelism**
+- Just invoke parallelStream() instead of stream() to process data in parallel.
+- Apart from this code almost remain same for stream and parallel stream.
+
+![img.png](StreamVsParallelStream.png)
