@@ -30,6 +30,13 @@ public class StringTransformDynamicallyExample {
                 .collect(Collectors.toList());
     }
 
+    public List<String> stringToLowerCase(List<String> names) {
+
+        return names.parallelStream()
+                .map(String::toLowerCase)
+                .collect(Collectors.toList());
+    }
+
     private static String addLengthToString(String name) {
         delay(500);
         return name.length() +"-" + name;

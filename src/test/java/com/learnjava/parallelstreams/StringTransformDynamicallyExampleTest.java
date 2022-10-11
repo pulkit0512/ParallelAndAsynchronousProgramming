@@ -46,4 +46,13 @@ class StringTransformDynamicallyExampleTest {
 
         resultList.forEach(name -> assertTrue(name.contains("-")));
     }
+
+    @Test
+    void stringToLowerCase() {
+        startTimer();
+        List<String> resultList = example.stringToLowerCase(inputList);
+        timeTaken();
+
+        assertEquals(inputList.size(), resultList.size());
+    }
 }
