@@ -20,8 +20,8 @@ public class DataSet {
         List<CartItem> cartItems = new ArrayList<>();
         IntStream.rangeClosed(1, noOfItems)
                 .forEach(index -> {
-                    String cartId = "CartItem-" + index;
-                    CartItem cartItem = new CartItem(index, cartId, generateRandomPrice(), false, index);
+                    String itemName = "CartItem-" + index;
+                    CartItem cartItem = new CartItem(index, itemName, generateRandomPrice(), false, index);
                     cartItems.add(cartItem);
                 });
 
