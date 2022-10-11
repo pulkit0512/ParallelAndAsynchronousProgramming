@@ -13,6 +13,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import static com.learnjava.util.CommonUtil.noOfCores;
 import static com.learnjava.util.CommonUtil.stopWatch;
 import static com.learnjava.util.LoggerUtil.log;
 
@@ -21,7 +22,7 @@ public class ProductServiceUsingExecutor {
     private ReviewService reviewService;
 
     // Creates an executor service with threads equals to the number of cores in the machine.
-    static ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    static ExecutorService executorService = Executors.newFixedThreadPool(noOfCores());
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         try {

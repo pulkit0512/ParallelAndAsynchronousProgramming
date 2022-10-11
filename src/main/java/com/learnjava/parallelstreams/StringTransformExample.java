@@ -7,21 +7,26 @@ import java.util.stream.Collectors;
 
 import static com.learnjava.util.CommonUtil.delay;
 import static com.learnjava.util.CommonUtil.stopWatch;
+import static com.learnjava.util.CommonUtil.stopWatchReset;
 import static com.learnjava.util.LoggerUtil.log;
 
 public class StringTransformExample {
 
     public static void main(String[] args) {
 
+        StringTransformExample stringTransformExample = new StringTransformExample();
         List<String> names = DataSet.namesList();
-        transformToUpperCase(names);
+        stringTransformExample.transformToUpperCase(names);
+        System.out.println();
 
-        transformToAddLengthToStringStream(names);
+        stringTransformExample.transformToAddLengthToStringStream(names);
+        System.out.println();
 
-        transformToAddLengthToStringParallelStream(names);
+        List<String> resultList = stringTransformExample.transformToAddLengthToStringParallelStream(names);
+        log("Result list: " + resultList);
     }
 
-    private static void transformToUpperCase(List<String> names) {
+    public void transformToUpperCase(List<String> names) {
         stopWatch.start();
 
         List<String> convertedNames = names.parallelStream() // 1) Fork
@@ -34,8 +39,8 @@ public class StringTransformExample {
         log("Time Taken is: " + stopWatch.getTime());
     }
 
-    private static void transformToAddLengthToStringStream(List<String> names) {
-        stopWatch.reset();
+    public void transformToAddLengthToStringStream(List<String> names) {
+        stopWatchReset();
 
         stopWatch.start();
 
@@ -49,8 +54,8 @@ public class StringTransformExample {
         log("Time Taken using stream is: " + stopWatch.getTime());
     }
 
-    private static void transformToAddLengthToStringParallelStream(List<String> names) {
-        stopWatch.reset();
+    public List<String> transformToAddLengthToStringParallelStream(List<String> names) {
+        stopWatchReset();
 
         stopWatch.start();
 
@@ -60,9 +65,9 @@ public class StringTransformExample {
                 .collect(Collectors.toList()); // 3) Join
 
         stopWatch.stop();
-
-        log("Converted names: " + convertedNames);
         log("Time Taken using parallelStream is: " + stopWatch.getTime());
+
+        return convertedNames;
     }
 
     private static String addLengthToString(String name) {

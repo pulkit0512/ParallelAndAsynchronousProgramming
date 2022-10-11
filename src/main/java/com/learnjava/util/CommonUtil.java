@@ -18,4 +18,12 @@ public class CommonUtil {
             LoggerUtil.log("Exception is :" + e.getMessage());
         }
     }
+
+    public static void stopWatchReset(){
+        stopWatch.reset();
+    }
+
+    public static  int noOfCores(){
+        return Runtime.getRuntime().availableProcessors();
+    }
 }

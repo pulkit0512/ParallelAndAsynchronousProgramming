@@ -123,3 +123,9 @@ from the deck of thread1 from the other end so that currently executing task is 
 - Apart from this code almost remain same for stream and parallel stream.
 
 ![img.png](StreamVsParallelStream.png)
+
+## Why Unit Tests?
+- Unit Testing allows you to programmatically test your code
+- Manual Testing slows down the development and delivery
+- Unit Testing allows the developer or the app team to make enhancements to the existing code easily and faster
+
