@@ -17,13 +17,17 @@ public class StringTransformExample {
         StringTransformExample stringTransformExample = new StringTransformExample();
         List<String> names = DataSet.namesList();
         stringTransformExample.transformToUpperCase(names);
-        System.out.println();
+        log("\n");
 
         stringTransformExample.transformToAddLengthToStringStream(names);
-        System.out.println();
+        log("\n");
 
         List<String> resultList = stringTransformExample.transformToAddLengthToStringParallelStream(names);
         log("Result list: " + resultList);
+        log("\n");
+
+        List<String> resultListSequential = stringTransformExample.transformToAddLengthToStringParallelStreamConvertedSequential(names);
+        log("Result list sequential: " + resultListSequential);
     }
 
     public void transformToUpperCase(List<String> names) {
@@ -66,6 +70,25 @@ public class StringTransformExample {
 
         stopWatch.stop();
         log("Time Taken using parallelStream is: " + stopWatch.getTime());
+
+        return convertedNames;
+    }
+
+    public List<String> transformToAddLengthToStringParallelStreamConvertedSequential(List<String> names) {
+        stopWatchReset();
+
+        stopWatch.start();
+
+        List<String> convertedNames = names
+                .parallelStream()
+                .map(StringTransformExample::addLengthToString)
+                .sequential() // this will change the parallel stream behaviour to sequential
+                .parallel() // the last call in the pipeline will be considered, all other calls will be overridden.
+                .sequential()
+                .collect(Collectors.toList());
+
+        stopWatch.stop();
+        log("Time Taken using parallelStream converted to Sequential is: " + stopWatch.getTime());
 
         return convertedNames;
     }

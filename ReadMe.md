@@ -129,3 +129,13 @@ from the deck of thread1 from the other end so that currently executing task is 
 - Manual Testing slows down the development and delivery
 - Unit Testing allows the developer or the app team to make enhancements to the existing code easily and faster
 
+## Sequential/Parallel Functions in Streams API
+
+### sequential() and parallel()
+- Streams API are sequential by default
+- sequential() -> Executes the stream in sequential
+- parallel() -> Executes the stream in parallel
+- Both the functions() changes the behavior of the whole pipeline, this means if we have a parallelStream, 
+and we invoke sequential() over it. Then whole pipeline will work sequentially. Same with stream, if we invoke parallel()
+over it then whole pipeline will execute in parallel.
+- Use these functions when we want to evaluate performance between parallel and sequential workflow.
