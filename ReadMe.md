@@ -172,4 +172,32 @@ parallelStream()
 
 **Recommendation - Always compare the performance before you use parallelStream()**
 
+## Parallel Streams - Final Computation Result Order
+- The order of the collection depends on:
+- Type of Collection
+- Spliterator Implementation of the collection
+- Example : ArrayList
+- Type of Collection - Ordered
+- Spliterator Implementation - Ordered Spliterator Implementation
+- Example : Set
+- Type of Collection - UnOrdered
+- Spliterator Implementation - UnOrdered Spliterator Implementation
+
+## Collect vs Reduce
+
+![img.png](CollectVsReduce.png)
+
+**The reduce() function performs an immutable computation throughout in each and every step.**
+
+![img.png](ReduceInParallelStreams.png)
+
+### Identity in reduce()
+- Identity gives you the same value when its used in the computation
+- Addition: Identity = 0
+- 0 + 1 => 1
+- 0 + 20 => 20
+- Multiplication : Identity = 1
+- 1 * 1 => 1
+- 1 * 20 => 20
+- **reduce() is recommended for computations that are associative**
 

@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.learnjava.util.LoggerUtil.log;
+
 public class CheckoutService {
     private final PriceValidatorService priceValidatorService;
 
@@ -43,7 +45,27 @@ public class CheckoutService {
         if(!priceValidatorList.isEmpty()) {
             return new CheckoutResponse(CheckoutStatus.FAILURE, priceValidatorList);
         }else{
-            return new CheckoutResponse(CheckoutStatus.SUCCESS);
+            //double finalPrice = getFinalPrice(cart);
+            double finalPrice = getFinalPriceReduce(cart);
+
+            log("Final Price: " + finalPrice);
+
+            return new CheckoutResponse(CheckoutStatus.SUCCESS, finalPrice);
         }
+    }
+
+    private double getFinalPrice(Cart cart) {
+        return cart.getCartItems()
+                .parallelStream()
+                .map(item -> item.getQuantity() * item.getPrice())
+                .mapToDouble(Double::doubleValue)
+                .sum();
+    }
+
+    private double getFinalPriceReduce(Cart cart) {
+        return cart.getCartItems()
+                .parallelStream()
+                .map(item -> item.getQuantity() * item.getPrice())
+                .reduce(0.0, Double::sum);
     }
 }
