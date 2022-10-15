@@ -99,6 +99,8 @@ from the deck of thread1 from the other end so that currently executing task is 
 - This is one of the reason we have double ended work queue.
 - As soon as all the tasks are completed the result is shared back to the client.
 
+**Common ForkJoin Pool is shared by the whole process**
+
 ### ForkJoin Task
 - ForkJoin Task represents part of the data and its computation
 - Type of tasks to submit to ForkJoin Pool
@@ -160,6 +162,8 @@ parallelStream()
 - Combine phase in Streams API maps to terminal operations
 - Uses collect() and reduce() functions. ex: collect(toList())
 
+![img.png](ParallelStreamsWorking.png)
+
 ### Spliterator in ParallelStreams
 - Data source is split into multiple chunks by the Spliterator
 - **Each and every collection has a different Spliterator Implementation**
@@ -201,3 +205,17 @@ parallelStream()
 - 1 * 20 => 20
 - **reduce() is recommended for computations that are associative**
 
+## Modifying Default parallelism
+- Two options:
+- Either via code set this system property. System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "100");
+- or pass this as environment variable. -Djava.util.concurrent.ForkJoinPool.common.parallelism=100
+
+## Parallel Streams - When not to use them ?
+- Parallel Streams
+- Split
+- Execute
+- Combine
+- When Split and combine operation is heavy then try to avoid using parallel streams.
+- Data set is small
+- Auto Boxing and Unboxing does not perform better
+- Stream API operators -> iterate(), limit()
