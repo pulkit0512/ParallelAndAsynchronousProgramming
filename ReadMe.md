@@ -139,3 +139,37 @@ from the deck of thread1 from the other end so that currently executing task is 
 and we invoke sequential() over it. Then whole pipeline will work sequentially. Same with stream, if we invoke parallel()
 over it then whole pipeline will execute in parallel.
 - Use these functions when we want to evaluate performance between parallel and sequential workflow.
+
+## ParallelStreams How it works ?
+parallelStream()
+- Split the data in to chunks
+- Execute the data chunks
+- Combine the result
+
+### Split
+- Data Source is split into small data chunks
+- Example - List Collection split into chunks of elements to size 1
+- This is done using Spliterators
+- For ArrayList, the Spliterator is ArrayListSpliterator 
+
+### Execute 
+- Data chunks are applied to the Stream Pipeline and the Intermediate operations executed in a Common ForkJoin Pool
+
+### Combine
+- Combine the executed results into a final result
+- Combine phase in Streams API maps to terminal operations
+- Uses collect() and reduce() functions. ex: collect(toList())
+
+### Spliterator in ParallelStreams
+- Data source is split into multiple chunks by the Spliterator
+- **Each and every collection has a different Spliterator Implementation**
+- Performance differ based on the implementation
+
+
+### Summary - Spliterator in ParallelStreams
+- Invoking parallelStream() does not guarantee faster performance of your code
+- Need to perform additional steps compared to sequential: Splitting , Executing and Combining
+
+**Recommendation - Always compare the performance before you use parallelStream()**
+
+
