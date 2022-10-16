@@ -219,3 +219,57 @@ parallelStream()
 - Data set is small
 - Auto Boxing and Unboxing does not perform better
 - Stream API operators -> iterate(), limit()
+
+## CompletableFuture
+- Introduced in Java 8
+- CompletableFuture is an Asynchronous Reactive Functional Programming API
+- Asynchronous Computations in a functional Style
+- CompletableFutures API is created to solve the limitations of Future API
+- Initiate a background task and retrieve the result when the task is complete.
+
+### CompletableFuture and Reactive Programming
+#### Responsive:
+- Fundamentally Asynchronous
+- Call returns immediately and the response will be sent when its available
+#### Resilient:
+- Exception or error won’t crash the app or code
+#### Elastic:
+- Asynchronous Computations normally run in a pool of threads
+- No of threads can go up or down based on the need
+#### Message Driven:
+- Asynchronous computations interact with each through messages in an event-driven style
+
+### CompletableFuture API
+- Methods Can be divided into three groups
+- **Factory Methods**
+- static methods
+- Initiate asynchronous computation in background and return immediately.
+- **Completion Stage Methods**
+- Chain asynchronous computation
+- access result of previous chain computation and perform some action on it.
+- **Exception Methods**
+- Handle Exceptions in an Asynchronous Computation
+
+![img.png](SupplyAsyncVsThenAccept.png)
+
+### thenApply()
+- Completion Stage method
+- Transform the data from one form to another
+- Input is Function Functional Interface
+- Returns CompletableFuture<T>
+
+### thenCombine()
+- This is a Completion Stage Method
+- Used to Combine Independent Completable Futures
+- Takes two arguments
+- CompletionStage , BiFunction
+- Returns a CompletableFuture
+
+### thenCompose()
+- Completion Stage method
+- Transform the data from one form to another
+- Input is Function Functional Interface
+- Deals with functions that return CompletableFuture
+- thenApply deals with Function that returns a value
+- Returns CompletableFuture<T>
+
