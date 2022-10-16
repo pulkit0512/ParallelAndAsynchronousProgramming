@@ -1,6 +1,7 @@
 package com.learnjava.completablefuture;
 
 import com.learnjava.domain.ecommerce.Product;
+import com.learnjava.productservice.InventoryService;
 import com.learnjava.productservice.ProductInfoService;
 import com.learnjava.productservice.ReviewService;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ProductServiceUsingCompletableFutureTest {
     private final ProductInfoService productInfoService = new ProductInfoService();
     private final ReviewService reviewService = new ReviewService();
+    private final InventoryService inventoryService = new InventoryService();
 
     private final ProductServiceUsingCompletableFuture productService = new ProductServiceUsingCompletableFuture();
 
@@ -21,6 +23,7 @@ class ProductServiceUsingCompletableFutureTest {
     void setUp() {
         productService.setProductInfoService(productInfoService);
         productService.setReviewService(reviewService);
+        productService.setInventoryService(inventoryService);
         stopWatchReset();
     }
 
@@ -33,6 +36,34 @@ class ProductServiceUsingCompletableFutureTest {
         assertNotNull(product);
         assertTrue(product.getProductInfo().getProductOptions().size()>0);
         assertNotNull(product.getReview());
+    }
+
+    @Test
+    void retrieveProductDetailsWithInventory() {
+        String productId = "PA0512";
+
+        Product product = productService.retrieveProductDetailsWithInventory(productId);
+
+        assertNotNull(product);
+        assertTrue(product.getProductInfo().getProductOptions().size()>0);
+        assertNotNull(product.getReview());
+        product.getProductInfo()
+                .getProductOptions()
+                .forEach(productOption -> assertNotNull(productOption.getInventory()));
+    }
+
+    @Test
+    void retrieveProductDetailsWithInventoryWithCompletableFuture() {
+        String productId = "PA0512";
+
+        Product product = productService.retrieveProductDetailsWithInventoryWithCompletableFuture(productId);
+
+        assertNotNull(product);
+        assertTrue(product.getProductInfo().getProductOptions().size()>0);
+        assertNotNull(product.getReview());
+        product.getProductInfo()
+                .getProductOptions()
+                .forEach(productOption -> assertNotNull(productOption.getInventory()));
     }
 
     @Test
