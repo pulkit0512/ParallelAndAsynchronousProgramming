@@ -273,3 +273,13 @@ parallelStream()
 - thenApply deals with Function that returns a value
 - Returns CompletableFuture<T>
 
+## Exception Handling in CompletableFuture
+- CompletableFuture API has functional style of handling exceptions
+- Three options available:
+- handle()
+- exceptionally()
+- whenComplete()
+- handle() and exceptionally() both Catches Exception and Recover. We can return a recovery value to caller.
+- whenComplete() Catches Exception but Does not Recover. It throws exception to caller.
+
+
