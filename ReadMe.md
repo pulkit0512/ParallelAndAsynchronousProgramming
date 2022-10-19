@@ -296,3 +296,23 @@ will be shared by both ParallelStreams and CompletableFuture.
 - Parallel Streams don't have option to use a User Defined Thread Pool. Whereas in Completable Future we can create 
 user defined Thread Pools using Executors.
 - Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+
+
+## Async() Overloaded Functions
+#### Regular Functions
+- thenCombine()
+- thenApply()
+- thenCompose()
+- thenAccept()
+
+#### Async Functions
+- thenCombineAsync()
+- thenApplyAsync()
+- thenComposeAsync()
+- thenAcceptAsync()
+
+Async() Overloaded Functions
+- Using async() functions allows you to change the thread of execution
+- Use this when you have blocking operations in your CompletableFuture pipeline. 
+- It doesn't guarantee to switch the thread, only switches thread if there is a blocking call.
+- Will give same result, but under the hood execution will be different. It will try to execute different tasks on different threads.

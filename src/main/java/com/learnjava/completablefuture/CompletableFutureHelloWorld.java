@@ -114,6 +114,34 @@ public class CompletableFutureHelloWorld {
         return res;
     }
 
+    public String helloWorldThreeAsyncCallsLogAsync() {
+        startTimer();
+        CompletableFuture<String> helloFuture = CompletableFuture.supplyAsync(helloWorldService::hello);
+        CompletableFuture<String> worldFuture = CompletableFuture.supplyAsync(helloWorldService::world);
+        CompletableFuture<String> hiFuture = CompletableFuture.supplyAsync(() -> {
+            delay(400);
+            return HI_COMPLETABLE_FUTURE;
+        });
+
+        String res = helloFuture
+                .thenCombineAsync(worldFuture, (hello, world) -> {
+                    log("thenCombineAsync: Hello/World");
+                    return hello + world;
+                })
+                .thenCombineAsync(hiFuture, (prev, curr) -> {
+                    log("thenCombineAsync: prev/curr");
+                    return prev+curr;
+                })
+                .thenApplyAsync(s -> {
+                    log("thenApplyAsync Uppercase transformation");
+                    return s.toUpperCase();
+                })
+                .join();
+        timeTaken();
+
+        return res;
+    }
+
     public String helloWorldThreeAsyncCallsCustomThreadPool() {
         startTimer();
         // Creates a Custom Thread Pool of size equal to number of Cores.
@@ -138,6 +166,36 @@ public class CompletableFutureHelloWorld {
                     log("thenApply Uppercase transformation");
                     return s.toUpperCase();
                 })
+                .join();
+        timeTaken();
+
+        return res;
+    }
+
+    public String helloWorldThreeAsyncCallsCustomThreadPoolAsync() {
+        startTimer();
+        // Creates a Custom Thread Pool of size equal to number of Cores.
+        ExecutorService executorService = Executors.newFixedThreadPool(CommonUtil.noOfCores());
+        CompletableFuture<String> helloFuture = CompletableFuture.supplyAsync(helloWorldService::hello, executorService);
+        CompletableFuture<String> worldFuture = CompletableFuture.supplyAsync(helloWorldService::world, executorService);
+        CompletableFuture<String> hiFuture = CompletableFuture.supplyAsync(() -> {
+            delay(400);
+            return HI_COMPLETABLE_FUTURE;
+        }, executorService);
+
+        String res = helloFuture
+                .thenCombineAsync(worldFuture, (hello, world) -> {
+                    log("thenCombineAsync: Hello & World");
+                    return hello + world;
+                }, executorService)
+                .thenCombineAsync(hiFuture, (prev, curr) -> {
+                    log("thenCombineAsync: prev & curr");
+                    return prev+curr;
+                }, executorService)
+                .thenApplyAsync(s -> {
+                    log("thenApplyAsync Uppercase transformation");
+                    return s.toUpperCase();
+                }, executorService)
                 .join();
         timeTaken();
 

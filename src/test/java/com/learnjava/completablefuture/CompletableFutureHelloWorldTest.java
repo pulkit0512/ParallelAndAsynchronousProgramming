@@ -76,9 +76,25 @@ class CompletableFutureHelloWorldTest {
 
     @Test
     void helloWorldThreeAsyncCallsLog() {
+        // If we run this test, most of the tasks would be performed by a same thread.
+        // This is how API is designed, reason behind this is, Context Switching can sometime take time.
+        // So to avoid that delay, API is designed this way.
+        // But we can alter this behaviour if needed.
         stopWatchReset();
 
         String res = completableFutureHelloWorld.helloWorldThreeAsyncCallsLog();
+        assertEquals("HELLO WORLD! HI COMPLETABLE FUTURE", res);
+    }
+
+    @Test
+    void helloWorldThreeAsyncCallsLogAsync() {
+        // If we run this test, most of the tasks would be performed by a same thread.
+        // This is how API is designed, reason behind this is, Context Switching can sometime take time.
+        // So to avoid that delay, API is designed this way.
+        // But we can alter this behaviour if needed.
+        stopWatchReset();
+
+        String res = completableFutureHelloWorld.helloWorldThreeAsyncCallsLogAsync();
         assertEquals("HELLO WORLD! HI COMPLETABLE FUTURE", res);
     }
 
@@ -87,6 +103,14 @@ class CompletableFutureHelloWorldTest {
         stopWatchReset();
 
         String res = completableFutureHelloWorld.helloWorldThreeAsyncCallsCustomThreadPool();
+        assertEquals("HELLO WORLD! HI COMPLETABLE FUTURE", res);
+    }
+
+    @Test
+    void helloWorldThreeAsyncCallsCustomThreadPoolAsync() {
+        stopWatchReset();
+
+        String res = completableFutureHelloWorld.helloWorldThreeAsyncCallsCustomThreadPoolAsync();
         assertEquals("HELLO WORLD! HI COMPLETABLE FUTURE", res);
     }
 }
