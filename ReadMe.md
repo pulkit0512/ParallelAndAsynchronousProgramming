@@ -323,6 +323,14 @@ Async() Overloaded Functions
 - Spring WebClient is a functional style RestClient
 - Spring WebClient can be used as a blocking or non-blocking Rest Client
 
+## allOf() - Dealing with Multiple CompletableFutures
+- static method that’s part of CompletableFuture API
+- Use allOf() when you are dealing with Multiple CompletableFuture
+
+## anyOf() - Dealing with Multiple CompletableFutures
+- static method that’s part of CompletableFuture API
+- Use anyOf() when you are dealing with retrieving same data from multiple Data Sources,
+and we want to collect data from the data source which returns the data fastest.
 
 
 ## ## Swagger-UI

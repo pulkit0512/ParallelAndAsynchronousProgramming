@@ -84,4 +84,18 @@ class MoviesClientTest {
         assertEquals(7, movies.size());
 
     }
+
+    @RepeatedTest(10)
+    void retrieveMoviesCompletableFutureAllOf() {
+
+        List<Long> movieIds = List.of(1L, 2L, 3L, 4L, 5L, 6L, 7L);
+
+        startTimer();
+        var movies = moviesClient.retrieveMoviesCompletableFutureAllOf(movieIds);
+        timeTaken();
+
+        assertNotNull(movies);
+        assertEquals(7, movies.size());
+
+    }
 }

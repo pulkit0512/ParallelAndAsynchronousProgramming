@@ -39,9 +39,31 @@ public class MoviesClient {
                 .map(this::retrieveMovieUsingCompletableFuture)
                 .collect(Collectors.toList());
 
+        // Here, we are performing join on each Completable Future one-by-one and if any of the CompletableFuture not yet completed it blocks the thread and waits.
+        // We have an alternative to this, we can use allOf(), which make sure that code execution moves ahead only after
+        // all completable Futures are completely executed.
         return movieFutures.stream()
                 .map(CompletableFuture::join)
                 .collect(Collectors.toList());
+    }
+
+    public List<Movie> retrieveMoviesCompletableFutureAllOf(List<Long> movieIds) {
+        var movieFutures = movieIds.stream()
+                .map(this::retrieveMovieUsingCompletableFuture)
+                .collect(Collectors.toList());
+
+        // This function only completes after all the completableFutures passed to it completes.
+        var completableFutureAllOf = CompletableFuture.allOf(movieFutures.toArray(new CompletableFuture[0]));
+
+        return completableFutureAllOf
+                .thenApply(v -> movieFutures
+                        .stream()
+                        // This join completes immediately since this code execution will only happen,
+                        // after all the completableFutures executes completely.
+                        .map(CompletableFuture::join)
+                        .collect(Collectors.toList()))
+                .join();
+
     }
 
     public CompletableFuture<Movie> retrieveMovieUsingCompletableFuture(Long movieId) {

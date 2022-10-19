@@ -3,6 +3,7 @@ package com.learnjava.completablefuture;
 import com.learnjava.helloworldservice.HelloWorldService;
 import com.learnjava.util.CommonUtil;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -17,6 +18,7 @@ public class CompletableFutureHelloWorld {
     private final HelloWorldService helloWorldService;
 
     private static final String HI_COMPLETABLE_FUTURE = " Hi Completable Future";
+    private static final String HELLO_WORLD = "Hello World!";
 
     public CompletableFutureHelloWorld(HelloWorldService helloWorldService) {
         this.helloWorldService = helloWorldService;
@@ -51,6 +53,43 @@ public class CompletableFutureHelloWorld {
         timeTaken();
 
         return res;
+    }
+
+    public String anyOf() {
+        // DB
+        CompletableFuture<String> dbFuture = CompletableFuture.supplyAsync(() -> {
+            delay(1000);
+            log("DB Call");
+            return HELLO_WORLD;
+        });
+
+        // Rest Call
+        CompletableFuture<String> restCallFuture = CompletableFuture.supplyAsync(() -> {
+            delay(2000);
+            log("Rest Call");
+            return HELLO_WORLD;
+        });
+
+        // Soap Call
+        CompletableFuture<String> soapFuture = CompletableFuture.supplyAsync(() -> {
+            delay(1400);
+            log("Soap Call");
+            return HELLO_WORLD;
+        });
+
+        List<CompletableFuture<String>> completableFutures = List.of(dbFuture, restCallFuture, soapFuture);
+
+        // It's going to respond with the first CompletableFuture that going to respond
+        var completableFutureAnyOf = CompletableFuture.anyOf(completableFutures.toArray(new CompletableFuture[0]));
+
+        return (String) completableFutureAnyOf
+                .thenApply(v -> {
+                    if(v instanceof String){
+                        return v;
+                    }
+                    return null;
+                })
+                .join();
     }
 
     public String helloWorldTwoAsyncCalls() {

@@ -113,4 +113,12 @@ class CompletableFutureHelloWorldTest {
         String res = completableFutureHelloWorld.helloWorldThreeAsyncCallsCustomThreadPoolAsync();
         assertEquals("HELLO WORLD! HI COMPLETABLE FUTURE", res);
     }
+
+    @Test
+    void anyOf() {
+        stopWatchReset();
+
+        String res = completableFutureHelloWorld.anyOf();
+        assertEquals("Hello World!", res);
+    }
 }
