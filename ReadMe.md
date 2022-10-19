@@ -316,3 +316,16 @@ Async() Overloaded Functions
 - Use this when you have blocking operations in your CompletableFuture pipeline. 
 - It doesn't guarantee to switch the thread, only switches thread if there is a blocking call.
 - Will give same result, but under the hood execution will be different. It will try to execute different tasks on different threads.
+
+## Why Spring WebClient?
+- Spring is one of the popular framework in the Java Community
+- Spring WebClient is a rest client library that’s got released as part of Spring 5
+- Spring WebClient is a functional style RestClient
+- Spring WebClient can be used as a blocking or non-blocking Rest Client
+
+
+
+## ## Swagger-UI
+
+- Click on the following [link](http://localhost:8080/movies/swagger-ui.html) for swagger.
+- Swagger is like a documentation that explains about the restful API.
