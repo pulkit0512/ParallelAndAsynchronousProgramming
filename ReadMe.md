@@ -99,7 +99,7 @@ from the deck of thread1 from the other end so that currently executing task is 
 - This is one of the reason we have double ended work queue.
 - As soon as all the tasks are completed the result is shared back to the client.
 
-**Common ForkJoin Pool is shared by the whole process**
+**Common ForkJoin Pool is shared by the whole process, it is singleton per JVM.**
 
 ### ForkJoin Task
 - ForkJoin Task represents part of the data and its computation
@@ -117,6 +117,8 @@ from the deck of thread1 from the other end so that currently executing task is 
 - Streams API got introduced in Java 8
 - Streams API is used to process a collection of Objects
 - Streams in Java are created by using the stream() method
+- Stream doesn't store any element, it's just a view of underlying stream source.
+- Stateful operations doesn't perform well in parallel streams. Since they need to have knowledge of previous state of stream.
 
 ### ParallelStreams
 - This allows your code to run in parallel
@@ -191,12 +193,12 @@ parallelStream()
 
 ![img.png](CollectVsReduce.png)
 
-**The reduce() function performs an immutable computation throughout in each and every step.**
+**reduce() function performs an immutable computation throughout in each and every step.**
 
 ![img.png](ReduceInParallelStreams.png)
 
 ### Identity in reduce()
-- Identity gives you the same value when its used in the computation
+- Identity gives you the same value when it's used in the computation
 - Addition: Identity = 0
 - 0 + 1 => 1
 - 0 + 20 => 20
@@ -230,7 +232,7 @@ parallelStream()
 ### CompletableFuture and Reactive Programming
 #### Responsive:
 - Fundamentally Asynchronous
-- Call returns immediately and the response will be sent when its available
+- Call returns immediately and the response will be sent when it's available
 #### Resilient:
 - Exception or error won’t crash the app or code
 #### Elastic:
@@ -282,4 +284,15 @@ parallelStream()
 - handle() and exceptionally() both Catches Exception and Recover. We can return a recovery value to caller.
 - whenComplete() Catches Exception but Does not Recover. It throws exception to caller.
 
-
+## Why use a different ThreadPool ?
+- Common ForkJoinPool is shared by
+- ParallelStreams
+- CompletableFuture
+- It's common for applications to use ParallelStreams and CompletableFuture together. And in these cases ForkJoinPool
+will be shared by both ParallelStreams and CompletableFuture.
+- The following issues may occur:
+- Thread being blocked by a time-consuming task, either in Parallel Streams or in Completable Future.
+- Thread not available.
+- Parallel Streams don't have option to use a User Defined Thread Pool. Whereas in Completable Future we can create 
+user defined Thread Pools using Executors.
+- Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());

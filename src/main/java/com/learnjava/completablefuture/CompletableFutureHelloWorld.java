@@ -1,8 +1,11 @@
 package com.learnjava.completablefuture;
 
 import com.learnjava.helloworldservice.HelloWorldService;
+import com.learnjava.util.CommonUtil;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static com.learnjava.util.CommonUtil.delay;
 import static com.learnjava.util.CommonUtil.startTimer;
@@ -12,6 +15,8 @@ import static com.learnjava.util.LoggerUtil.log;
 public class CompletableFutureHelloWorld {
 
     private final HelloWorldService helloWorldService;
+
+    private static final String HI_COMPLETABLE_FUTURE = " Hi Completable Future";
 
     public CompletableFutureHelloWorld(HelloWorldService helloWorldService) {
         this.helloWorldService = helloWorldService;
@@ -68,7 +73,7 @@ public class CompletableFutureHelloWorld {
         CompletableFuture<String> worldFuture = CompletableFuture.supplyAsync(helloWorldService::world);
         CompletableFuture<String> hiFuture = CompletableFuture.supplyAsync(() -> {
             delay(1000);
-            return " Hi Completable Future";
+            return HI_COMPLETABLE_FUTURE;
         });
 
         String res = helloFuture
@@ -81,11 +86,69 @@ public class CompletableFutureHelloWorld {
         return res;
     }
 
+    public String helloWorldThreeAsyncCallsLog() {
+        startTimer();
+        CompletableFuture<String> helloFuture = CompletableFuture.supplyAsync(helloWorldService::hello);
+        CompletableFuture<String> worldFuture = CompletableFuture.supplyAsync(helloWorldService::world);
+        CompletableFuture<String> hiFuture = CompletableFuture.supplyAsync(() -> {
+            delay(300);
+            return HI_COMPLETABLE_FUTURE;
+        });
+
+        String res = helloFuture
+                .thenCombine(worldFuture, (hello, world) -> {
+                    log("thenCombine: Hello/World");
+                    return hello + world;
+                })
+                .thenCombine(hiFuture, (prev, curr) -> {
+                    log("thenCombine: prev/curr");
+                    return prev+curr;
+                })
+                .thenApply(s -> {
+                    log("thenApply Uppercase transformation");
+                    return s.toUpperCase();
+                })
+                .join();
+        timeTaken();
+
+        return res;
+    }
+
+    public String helloWorldThreeAsyncCallsCustomThreadPool() {
+        startTimer();
+        // Creates a Custom Thread Pool of size equal to number of Cores.
+        ExecutorService executorService = Executors.newFixedThreadPool(CommonUtil.noOfCores());
+        CompletableFuture<String> helloFuture = CompletableFuture.supplyAsync(helloWorldService::hello, executorService);
+        CompletableFuture<String> worldFuture = CompletableFuture.supplyAsync(helloWorldService::world, executorService);
+        CompletableFuture<String> hiFuture = CompletableFuture.supplyAsync(() -> {
+            delay(300);
+            return HI_COMPLETABLE_FUTURE;
+        }, executorService);
+
+        String res = helloFuture
+                .thenCombine(worldFuture, (hello, world) -> {
+                    log("thenCombine: Hello & World");
+                    return hello + world;
+                })
+                .thenCombine(hiFuture, (prev, curr) -> {
+                    log("thenCombine: prev & curr");
+                    return prev+curr;
+                })
+                .thenApply(s -> {
+                    log("thenApply Uppercase transformation");
+                    return s.toUpperCase();
+                })
+                .join();
+        timeTaken();
+
+        return res;
+    }
+
     public String helloWorldFourAsyncCalls() {
         startTimer();
         CompletableFuture<String> hiFuture = CompletableFuture.supplyAsync(() -> {
             delay(1000);
-            return " Hi Completable Future";
+            return HI_COMPLETABLE_FUTURE;
         });
         CompletableFuture<String> helloFuture = CompletableFuture.supplyAsync(helloWorldService::hello);
         CompletableFuture<String> worldFuture = CompletableFuture.supplyAsync(helloWorldService::world);

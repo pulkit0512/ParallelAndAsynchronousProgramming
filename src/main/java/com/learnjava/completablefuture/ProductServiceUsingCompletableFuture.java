@@ -100,10 +100,22 @@ public class ProductServiceUsingCompletableFuture {
                 });
 
         CompletableFuture<Review> reviewFuture = CompletableFuture
-                .supplyAsync(() -> reviewService.retrieveReviews(productId));
+                .supplyAsync(() -> reviewService.retrieveReviews(productId))
+                .exceptionally(ex -> {
+                    log("Handled exception occurred in Review service: " + ex.getMessage());
+                    return Review.builder()
+                            .noOfReviews(0)
+                            .rating(0.0)
+                            .build();
+                });
 
         Product product = productInfoFuture
                 .thenCombine(reviewFuture, (productInfo, review) -> new Product(productId, productInfo, review))
+                .whenComplete((pro, ex) -> {
+                    if(ex!=null) {
+                        log("Inside whenComplete : " + pro + " Exception is: " + ex.getMessage());
+                    }
+                })
                 .join(); // blocks the thread
 
         timeTaken();
@@ -126,6 +138,10 @@ public class ProductServiceUsingCompletableFuture {
                 .stream()
                 .map(productOption ->
                         CompletableFuture.supplyAsync(() -> inventoryService.retrieveInventory(productOption))
+                        .exceptionally(ex -> {
+                            log("In Exceptionally block of Inventory Service: " + ex.getMessage());
+                            return Inventory.builder().count(1).build();
+                        })
                         .thenApply(inventory -> {
                             productOption.setInventory(inventory);
                             return productOption;

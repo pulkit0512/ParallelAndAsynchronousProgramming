@@ -73,4 +73,20 @@ class CompletableFutureHelloWorldTest {
         String res3 = completableFutureHelloWorld.helloWorldFourAsyncCalls();
         assertEquals("HELLO WORLD! HI COMPLETABLE FUTURE BYE!", res3);
     }
+
+    @Test
+    void helloWorldThreeAsyncCallsLog() {
+        stopWatchReset();
+
+        String res = completableFutureHelloWorld.helloWorldThreeAsyncCallsLog();
+        assertEquals("HELLO WORLD! HI COMPLETABLE FUTURE", res);
+    }
+
+    @Test
+    void helloWorldThreeAsyncCallsCustomThreadPool() {
+        stopWatchReset();
+
+        String res = completableFutureHelloWorld.helloWorldThreeAsyncCallsCustomThreadPool();
+        assertEquals("HELLO WORLD! HI COMPLETABLE FUTURE", res);
+    }
 }
